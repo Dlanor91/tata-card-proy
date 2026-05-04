@@ -1,59 +1,44 @@
-# TataCard
+# Tata Card — control semanal
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.22.
+Aplicación web para **planificar y seguir el gasto semanal** asociado al uso de la tarjeta (Tata Card / vale semanal). Definís un **monto tope** por semana, cargás **ítems con cantidad y precio unitario**, y la app **suma lo usado** y muestra cuánto **queda disponible** (o si te pasaste del límite).
 
-## Development server
+## ¿Para qué sirve?
 
-To start a local development server, run:
+- Fijar el **monto total semanal** (por ejemplo, el cupo o lo que querés gastar en la semana).
+- Registrar compras o conceptos en una **tabla** (descripción, cantidad, precio por unidad).
+- Ver en tiempo real el **total usado** y el **saldo disponible** en pesos argentinos, con aviso si superás el tope.
 
-```bash
-ng serve
-```
+No persiste datos en servidor: todo es **en el navegador** (al recargar la página se pierde el estado salvo que en el futuro se añada almacenamiento).
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Stack técnico
 
-## Code scaffolding
+| Aspecto        | Detalle                          |
+| -------------- | -------------------------------- |
+| Framework      | Angular **19**, componentes **standalone** |
+| Estilos        | SCSS                             |
+| Formato código | Prettier (`npm run format`)      |
+| Rutas          | Ruta principal: `/home-page`   |
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Requisitos
 
-```bash
-ng generate component component-name
-```
+- [Node.js](https://nodejs.org/) (recomendado: **LTS 20 o 22**; versiones impares como la 23 pueden dar avisos de compatibilidad con Angular).
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## Comandos
 
 ```bash
-ng build
+npm install          # dependencias
+npm start            # servidor de desarrollo → http://localhost:4200/
+npm run build        # compilación de producción (salida en dist/)
+npm test             # tests unitarios (Karma)
+npm run format       # aplicar Prettier
+npm run format:check # comprobar formato sin escribir archivos
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Estructura relevante del código
 
-## Running unit tests
+- `src/app/app.routes.ts` — redirección inicial y ruta `home-page`.
+- `src/app/home-page/` — pantalla principal: presupuesto semanal, tabla y cálculos.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Recursos de Angular
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Documentación y CLI: [Angular](https://angular.dev/) · [Angular CLI](https://angular.dev/tools/cli).

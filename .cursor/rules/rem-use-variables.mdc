@@ -1,0 +1,36 @@
+---
+description: En CSS/SCSS usar siempre variables de diseño en lugar de rem crudos
+globs: "**/*.scss,**/*.css"
+alwaysApply: false
+---
+
+# Usar variables en lugar de rem crudos
+
+En estilos (SCSS/CSS) **no uses valores en `rem` literales**. Usa las variables de `shared-ui` (`@use 'variables' as *`).
+
+## Dónde tomar las variables
+
+- **Espaciado**: `$spacing-1` (0.25rem), `$spacing-2` (0.5rem), `$spacing-4` (1rem), `$spacing-6`, `$spacing-8`, `$spacing-10` (2.5rem), etc.
+- **Tamaños**: `$size-4`, `$size-8`, … `$size-64`; contenedores: `$container-max-width-md`, `$container-max-width-lg`.
+- **Border radius**: `$radius-sm`, `$radius-base`, `$radius-md`, `$radius-lg`, `$radius-xl`.
+- **Tipografía**: `$font-size-*`, `$font-weight-*`, `$line-height-*`, `$font-family-*`.
+- **Colores**: `$color-text-primary`, `$color-border-light`, `$color-bg-primary`, etc.
+- **Sombras**: `$shadow-sm`, `$shadow-base`, `$shadow-md`, etc.
+
+## Ejemplos
+
+```scss
+// ❌ Evitar
+padding: 0.25rem 1rem;
+min-height: 2.5rem;
+gap: 0.25rem;
+border-radius: 0.5rem;
+
+// ✅ Correcto
+padding: $spacing-1 $spacing-4;
+min-height: $spacing-10;
+gap: $spacing-1;
+border-radius: $radius-lg;
+```
+
+Si un valor en rem no tiene variable (p. ej. borde 1px `0.0625rem`), valorar añadir el token en `projects/shared-ui/src/styles/_variables.scss` y usarlo en el componente.

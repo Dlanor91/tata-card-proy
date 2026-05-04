@@ -1,0 +1,44 @@
+---
+description: Commits en español siguiendo principios SOLID (un commit, una responsabilidad)
+alwaysApply: true
+---
+
+# Commits en español y principios SOLID
+
+Cuando propongas o redactes mensajes de commit en este proyecto:
+
+## Idioma
+
+- **Siempre en español**: el asunto (subject) y el cuerpo (body) del commit se escriben en español.
+- **Tipo en inglés**: se mantiene el tipo de Conventional Commits en inglés (`feat`, `fix`, `docs`, `refactor`, etc.) por compatibilidad con Commitlint.
+
+**Ejemplos:**
+
+- `feat(tracking): mostrar nombre del titular en el listado de órdenes`
+- `fix(erp): corregir validación del código de seguridad`
+- `docs(readme): actualizar requisitos y sección de tests`
+
+## Principios SOLID aplicados a los commits
+
+- **Una sola responsabilidad (S)**: cada commit debe agrupar un único cambio cohesivo. No mezclar en un mismo commit una nueva funcionalidad con un refactor o un fix no relacionado.
+- **Cambios cerrados y abiertos (O)**: el mensaje debe describir qué se hace sin extenderse en detalles internos innecesarios; el scope (entre paréntesis) debe ser claro.
+- **Mensaje claro y estable (L)**: el asunto debe ser entendible por sí solo y coherente con el diff (no prometer algo que el commit no hace).
+- **Asunto conciso (I)**: un solo asunto por commit; si hay varios cambios relacionados pero distintos, considerar varios commits.
+- **Dependencia del contexto (D)**: el mensaje debe depender del “qué” y “por qué” visible, no de detalles de implementación que solo entiende quien escribió el código.
+
+**Formato recomendado:** `tipo(scope): asunto en español en imperativo`
+
+- **Asunto**: verbo en imperativo, sin punto final, ≤100 caracteres.
+- **Cuerpo** (opcional): explicación en español si hace falta contexto o razón del cambio.
+
+**Ejemplos que cumplen:**
+
+- `feat(erp): añadir filtro por estado en listado de órdenes`
+- `fix(tracking): usar nombreTitular de la API para clientes y empresas`
+- `refactor(shared-ui): extraer lógica de fechas a date.utils`
+
+**Evitar:**
+
+- Asuntos en inglés cuando el resto del equipo espera español.
+- Commits que mezclan “feat” + “fix” o “refactor” + cambio de estilo en muchos archivos sin relación.
+- Asuntos vagos: "cambios", "fix", "update" sin especificar qué.

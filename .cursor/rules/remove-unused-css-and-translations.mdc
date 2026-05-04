@@ -1,0 +1,23 @@
+---
+description: Eliminar CSS/SCSS y traducciones que no se usen
+globs: "**/*.scss,**/*.css,**/i18n*.json,**/i18n-erp/*.json,**/assets/i18n*/**/*.json"
+alwaysApply: false
+---
+
+# Eliminar código y traducciones no usados
+
+## CSS / SCSS
+
+- **Eliminar reglas o selectores** que no se usen en ningún template ni en ningún componente.
+- **Eliminar variables** (p. ej. en un componente) que se hayan definido pero no se referencien.
+- Antes de borrar: buscar la clase, variable o selector en el proyecto para confirmar que no se usa.
+
+Al refactorizar o eliminar una feature, borrar también los estilos asociados a esa feature.
+
+## Traducciones (i18n)
+
+- **Eliminar claves** de los JSON (es.json, en.json, etc.) que ya no se usen en ningún template ni en código (TranslateService, etc.).
+- Buscar la clave (p. ej. `ERP_ORDEN_RECOGIDA_`) en el código antes de eliminarla.
+- Mantener es.json y en.json sincronizados: si se quita una clave, quitarla en ambos (y en el resto de idiomas si existen).
+
+Al eliminar un componente o una feature, eliminar la sección o claves de traducción correspondientes.

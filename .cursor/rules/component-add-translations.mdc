@@ -1,0 +1,22 @@
+---
+description: Al crear un componente, añadir sección de traducciones en i18n
+alwaysApply: true
+---
+
+# Traducciones al crear componentes
+
+Cada vez que **crees un componente nuevo** (o una feature nueva) con texto visible:
+
+1. **Añade una sección de traducciones** en los JSON de i18n del ámbito que toque:
+   - ERP: `projects/express-return-erp/public/assets/i18n-erp/es.json` y `en.json`
+   - Otros: el `assets/i18n` correspondiente al proyecto
+
+2. **Incluye un comentario identificador** para la sección, por ejemplo:
+   - `"// Orden de devolución (orden_devolucion)": ""` en es.json
+   - `"// Orden de devolución (orden_devolucion / return orders)": ""` en en.json
+
+3. **Añade todas las claves** que use el componente: títulos, columnas, botones, mensajes, estados, placeholders, etc. Misma clave en ambos idiomas.
+
+4. **Nomenclatura**: UPPER_SNAKE_CASE, agrupadas por feature (p. ej. `ERP_ORDEN_DEVOLUCION_LIST_TITLE`, `ERP_ORDEN_DEVOLUCION_COLUMN_CODE`).
+
+No dejar texto hardcodeado en el template; toda cadena visible debe tener su clave en i18n y estar en es.json y en.json.

@@ -160,6 +160,18 @@ $bp-narrow: 26.625rem; // ~426px
   font-weight: 600;
 }
 
+.home-page__th-subtotal,
+.home-page__td-subtotal {
+  text-align: center !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.home-page__subtotal-value {
+  display: inline-block;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
 .home-page__th-actions {
   width: 3.5rem;
   text-align: center;
@@ -271,24 +283,53 @@ $bp-narrow: 26.625rem; // ~426px
     word-break: break-word;
   }
 
+  /* Ítems | Cantidad | Precio | Subtotal | Eliminar */
   .home-page__table th:nth-child(1),
   .home-page__table td:nth-child(1) {
-    width: 38%;
+    width: 40%;
   }
 
   .home-page__table th:nth-child(2),
   .home-page__table td:nth-child(2) {
-    width: 17%;
+    width: 18%;
   }
 
   .home-page__table th:nth-child(3),
   .home-page__table td:nth-child(3) {
-    width: 26%;
+    width: 18%;
   }
 
   .home-page__table th:nth-child(4),
   .home-page__table td:nth-child(4) {
-    width: 19%;
+    width: 14%;
+  }
+
+  .home-page__table th:nth-child(5),
+  .home-page__table td:nth-child(5) {
+    width: 10%;
+  }
+
+  .home-page__td-subtotal {
+    font-size: 0.6875rem;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+  }
+
+  .home-page__subtotal-value {
+    font-size: 0.6875rem;
+    font-weight: 600;
+  }
+
+  .home-page__th-subtotal {
+    font-size: 0.6875rem;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+  }
+
+  .home-page__th-actions,
+  .home-page__td-actions {
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
   }
 
   .home-page__input {
@@ -299,13 +340,6 @@ $bp-narrow: 26.625rem; // ~426px
   .home-page__input--num {
     max-width: 100%;
     width: 100%;
-  }
-
-  .home-page__th-actions,
-  .home-page__td-actions {
-    width: auto;
-    padding-left: 0.2rem;
-    padding-right: 0.2rem;
   }
 
   .home-page__btn--icon {

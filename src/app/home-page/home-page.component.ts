@@ -39,6 +39,10 @@ export class HomePageComponent {
     }).format(value);
   }
 
+  lineSubtotal(line: BudgetLine): number {
+    return line.quantity * line.unitPrice;
+  }
+
   setWeeklyBudget(raw: unknown): void {
     const n = typeof raw === 'number' ? raw : Number(String(raw).replace(',', '.'));
     this.weeklyBudget.set(Number.isFinite(n) && n >= 0 ? n : 0);

@@ -1,7 +1,7 @@
 <section class="home-page">
   <header class="home-page__header">
     <h1>Vale Semanal</h1>
-    <p class="home-page__lead">Control semanal de gasto</p>
+    <p class="home-page__lead">Control semanal de gastos</p>
   </header>
 
   <section class="home-page__budget" aria-labelledby="weekly-budget-label">
@@ -41,13 +41,14 @@
   <section class="home-page__items" aria-labelledby="items-caption">
     <table class="home-page__table">
       <caption id="items-caption" class="visually-hidden">
-        Ítems del gasto semanal: nombre, cantidad y precio unitario
+        Ítems del gasto semanal: nombre, cantidad, precio unitario y subtotal
       </caption>
       <thead>
         <tr>
           <th scope="col">Ítems</th>
           <th scope="col">Cantidad</th>
           <th scope="col">Precio</th>
+          <th scope="col" class="home-page__th-subtotal">Subtotal</th>
           <th scope="col" class="home-page__th-actions">
             <span class="visually-hidden">Eliminar fila</span>
           </th>
@@ -87,6 +88,9 @@
                 (ngModelChange)="updateLine(line.id, { unitPrice: +$event })"
                 inputmode="decimal"
               />
+            </td>
+            <td class="home-page__td-subtotal">
+              <span class="home-page__subtotal-value">{{ formatMoney(lineSubtotal(line)) }}</span>
             </td>
             <td class="home-page__td-actions">
               <button

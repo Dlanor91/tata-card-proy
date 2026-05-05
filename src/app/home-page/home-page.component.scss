@@ -244,7 +244,7 @@ $bp-narrow: 26.625rem; // ~426px
 
 @media (max-width: $bp-narrow) {
   .home-page {
-    padding: 0.6rem;
+    padding: 0.5rem;
     font-size: 0.625rem;
   }
 
@@ -296,12 +296,12 @@ $bp-narrow: 26.625rem; // ~426px
 
   .home-page__table th:nth-child(3),
   .home-page__table td:nth-child(3) {
-    width: 18%;
+    width: 17%;
   }
 
   .home-page__table th:nth-child(4),
   .home-page__table td:nth-child(4) {
-    width: 14%;
+    width: 15%;
   }
 
   .home-page__table th:nth-child(5),

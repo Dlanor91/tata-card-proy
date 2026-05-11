@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, HostListener, computed, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostListener,
+  computed,
+  effect,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 export interface BudgetLine {
@@ -17,11 +24,22 @@ export interface BudgetLine {
 })
 export class HomePageComponent {
   private static readonly INITIAL_WEEKLY_BUDGET = 1690;
+  /** Clave v1; si cambia el formato, incrementar y migrar o usar otra clave. */
+  private static readonly STORAGE_KEY = 'tata-card:vale-semanal:v1';
 
   /** Monto tope semanal (ej. 1690). */
   readonly weeklyBudget = signal(HomePageComponent.INITIAL_WEEKLY_BUDGET);
 
   readonly lines = signal<BudgetLine[]>([this.createEmptyLine()]);
+
+  constructor() {
+    this.restoreFromLocalStorage();
+    effect(() => {
+      this.weeklyBudget();
+      this.lines();
+      this.persistToLocalStorage();
+    });
+  }
 
   /** Suma de (cantidad × precio unitario) por fila. */
   readonly totalUsed = computed(() =>
@@ -35,6 +53,7 @@ export class HomePageComponent {
   /**
    * Hay cambios respecto al estado inicial: mostrar aviso al recargar o cerrar la pestaña.
    * Los navegadores solo permiten un diálogo genérico (no se puede personalizar el texto).
+   * Safari en iPhone no dispara `beforeunload`; ahí el respaldo es `persistToLocalStorage`.
    */
   readonly hasUnsavedChanges = computed(() => {
     if (this.weeklyBudget() !== HomePageComponent.INITIAL_WEEKLY_BUDGET) {
@@ -123,5 +142,79 @@ export class HomePageComponent {
       return 0;
     }
     return n;
+  }
+
+  private persistToLocalStorage(): void {
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
+    try {
+      localStorage.setItem(
+        HomePageComponent.STORAGE_KEY,
+        JSON.stringify({
+          weeklyBudget: this.weeklyBudget(),
+          lines: this.lines(),
+        })
+      );
+    } catch {
+      /* modo privado, cuota llena, etc. */
+    }
+  }
+
+  private restoreFromLocalStorage(): void {
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
+    let raw: string | null;
+    try {
+      raw = localStorage.getItem(HomePageComponent.STORAGE_KEY);
+    } catch {
+      return;
+    }
+    if (!raw) {
+      return;
+    }
+    try {
+      const data = JSON.parse(raw) as unknown;
+      if (!data || typeof data !== 'object') {
+        return;
+      }
+      const o = data as Record<string, unknown>;
+      const budget = o['weeklyBudget'];
+      const lineList = o['lines'];
+      if (typeof budget !== 'number' || !Number.isFinite(budget) || budget < 0) {
+        return;
+      }
+      if (!Array.isArray(lineList)) {
+        return;
+      }
+      const parsed = lineList
+        .map((row) => this.parseStoredLine(row))
+        .filter((line): line is BudgetLine => line !== null);
+      if (parsed.length === 0) {
+        return;
+      }
+      this.weeklyBudget.set(budget);
+      this.lines.set(parsed);
+    } catch {
+      /* JSON inválido */
+    }
+  }
+
+  private parseStoredLine(row: unknown): BudgetLine | null {
+    if (!row || typeof row !== 'object') {
+      return null;
+    }
+    const r = row as Record<string, unknown>;
+    const id =
+      typeof r['id'] === 'string' && r['id'].length > 0
+        ? r['id']
+        : crypto.randomUUID();
+    const item = typeof r['item'] === 'string' ? r['item'] : '';
+    const quantity =
+      typeof r['quantity'] === 'number' ? this.clampQty(r['quantity']) : 1;
+    const unitPrice =
+      typeof r['unitPrice'] === 'number' ? this.clampMoney(r['unitPrice']) : 0;
+    return { id, item, quantity, unitPrice };
   }
 }

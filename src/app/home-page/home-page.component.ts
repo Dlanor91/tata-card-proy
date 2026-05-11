@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 export interface BudgetLine {
@@ -16,8 +16,10 @@ export interface BudgetLine {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePageComponent {
+  private static readonly INITIAL_WEEKLY_BUDGET = 1690;
+
   /** Monto tope semanal (ej. 1690). */
-  readonly weeklyBudget = signal(1690);
+  readonly weeklyBudget = signal(HomePageComponent.INITIAL_WEEKLY_BUDGET);
 
   readonly lines = signal<BudgetLine[]>([this.createEmptyLine()]);
 
@@ -29,6 +31,31 @@ export class HomePageComponent {
   readonly available = computed(() => this.weeklyBudget() - this.totalUsed());
 
   readonly isOverBudget = computed(() => this.available() < 0);
+
+  /**
+   * Hay cambios respecto al estado inicial: mostrar aviso al recargar o cerrar la pestaña.
+   * Los navegadores solo permiten un diálogo genérico (no se puede personalizar el texto).
+   */
+  readonly hasUnsavedChanges = computed(() => {
+    if (this.weeklyBudget() !== HomePageComponent.INITIAL_WEEKLY_BUDGET) {
+      return true;
+    }
+    const rows = this.lines();
+    if (rows.length !== 1) {
+      return true;
+    }
+    const [row] = rows;
+    return row.item.trim() !== '' || row.quantity !== 1 || row.unitPrice !== 0;
+  });
+
+  @HostListener('window:beforeunload', ['$event'])
+  onBeforeUnload(event: BeforeUnloadEvent): void {
+    if (!this.hasUnsavedChanges()) {
+      return;
+    }
+    event.preventDefault();
+    event.returnValue = '';
+  }
 
   formatMoney(value: number): string {
     return new Intl.NumberFormat('es-AR', {

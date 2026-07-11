@@ -38,6 +38,20 @@
     }
   </section>
 
+  <section class="home-page__toolbar">
+    <button
+      type="button"
+      class="home-page__btn home-page__btn--clear"
+      (click)="clearLines()"
+      [disabled]="!canClearLines()"
+      title="Limpiar ítems"
+      aria-label="Limpiar ítems"
+    >
+      <span class="material-icons" aria-hidden="true">delete_sweep</span>
+      Limpiar ítems
+    </button>
+  </section>
+
   <section class="home-page__items" aria-labelledby="items-caption">
     <table class="home-page__table">
       <caption id="items-caption" class="visually-hidden">

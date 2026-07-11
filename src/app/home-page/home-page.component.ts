@@ -23,11 +23,11 @@ export interface BudgetLine {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePageComponent {
-  private static readonly INITIAL_WEEKLY_BUDGET = 1690;
+  private static readonly INITIAL_WEEKLY_BUDGET = 1755;
   /** Clave v1; si cambia el formato, incrementar y migrar o usar otra clave. */
   private static readonly STORAGE_KEY = 'tata-card:vale-semanal:v1';
 
-  /** Monto tope semanal (ej. 1690). */
+  /** Monto tope semanal (ej. 1755). */
   readonly weeklyBudget = signal(HomePageComponent.INITIAL_WEEKLY_BUDGET);
 
   readonly lines = signal<BudgetLine[]>([this.createEmptyLine()]);
@@ -49,6 +49,16 @@ export class HomePageComponent {
   readonly available = computed(() => this.weeklyBudget() - this.totalUsed());
 
   readonly isOverBudget = computed(() => this.available() < 0);
+
+  /** Hay al menos un ítem con datos (o más de una fila) para poder limpiar. */
+  readonly canClearLines = computed(() => {
+    const rows = this.lines();
+    if (rows.length > 1) {
+      return true;
+    }
+    const [row] = rows;
+    return !!row && (row.item.trim() !== '' || row.quantity !== 1 || row.unitPrice !== 0);
+  });
 
   /**
    * Hay cambios respecto al estado inicial: mostrar aviso al recargar o cerrar la pestaña.
@@ -124,6 +134,10 @@ export class HomePageComponent {
       const filtered = rows.filter((r) => r.id !== id);
       return filtered.length > 0 ? filtered : [this.createEmptyLine()];
     });
+  }
+
+  clearLines(): void {
+    this.lines.set([this.createEmptyLine()]);
   }
 
   private createEmptyLine(): BudgetLine {

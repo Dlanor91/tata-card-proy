@@ -7,6 +7,12 @@ $bp-narrow: 26.625rem; // ~426px
   font-size: 1rem;
 }
 
+.home-page__toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.75rem;
+}
+
 .home-page__header {
   margin-bottom: 1.5rem;
 }
@@ -206,6 +212,34 @@ $bp-narrow: 26.625rem; // ~426px
   background: #1547b8;
 }
 
+.home-page__btn--clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  background: #fff;
+  color: #9b1c1c;
+  border-color: #f0b4b4;
+  box-shadow: 0 0.0625rem 0.125rem rgba(155, 28, 28, 0.08);
+}
+
+.home-page__btn--clear .material-icons {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.home-page__btn--clear:hover:not(:disabled) {
+  background: #fde8e8;
+  border-color: #e08a8a;
+  color: #7a1212;
+}
+
+.home-page__btn--clear:focus-visible {
+  outline: 0.125rem solid #c53030;
+  outline-offset: 0.125rem;
+}
+
 .home-page__btn--ghost {
   background: transparent;
   border-color: #ccc;
@@ -244,7 +278,7 @@ $bp-narrow: 26.625rem; // ~426px
 
 @media (max-width: $bp-narrow) {
   .home-page {
-    padding: 0.5rem;
+    padding: 0.3rem;
     font-size: 0.625rem;
   }
 
@@ -286,22 +320,22 @@ $bp-narrow: 26.625rem; // ~426px
   /* Ítems | Cantidad | Precio | Subtotal | Eliminar */
   .home-page__table th:nth-child(1),
   .home-page__table td:nth-child(1) {
-    width: 40%;
+    width: 45%;
   }
 
   .home-page__table th:nth-child(2),
   .home-page__table td:nth-child(2) {
-    width: 18%;
+    width: 17%;
   }
 
   .home-page__table th:nth-child(3),
   .home-page__table td:nth-child(3) {
-    width: 17%;
+    width: 13%;
   }
 
   .home-page__table th:nth-child(4),
   .home-page__table td:nth-child(4) {
-    width: 15%;
+    width: 14%;
   }
 
   .home-page__table th:nth-child(5),
@@ -355,5 +389,14 @@ $bp-narrow: 26.625rem; // ~426px
   .home-page__btn--primary {
     padding: 0.4375rem 0.625rem;
     font-size: 0.8125rem;
+  }
+
+  .home-page__btn--clear {
+    padding: 0.4375rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .home-page__btn--clear .material-icons {
+    font-size: 1.125rem;
   }
 }

@@ -110,7 +110,7 @@
               <button
                 type="button"
                 class="home-page__btn home-page__btn--ghost home-page__btn--icon"
-                (click)="removeLine(line.id)"
+                (click)="requestRemoveLine(line.id)"
                 [disabled]="lines().length === 1"
                 title="Eliminar fila"
                 aria-label="Eliminar fila"
@@ -126,4 +126,40 @@
       Agregar ítem
     </button>
   </section>
+
+  @if (pendingDeleteLine()) {
+    <dialog
+      #deleteConfirmDialog
+      class="home-page__confirm"
+      aria-labelledby="confirm-delete-title"
+      aria-describedby="confirm-delete-message"
+      (click)="onDeleteDialogClick($event)"
+      (close)="onDeleteDialogClose()"
+    >
+      <h2 id="confirm-delete-title" class="home-page__confirm-title">Eliminar ítem</h2>
+      <p id="confirm-delete-message" class="home-page__confirm-message">
+        @if (pendingDeleteLine()!.item.trim()) {
+          ¿Quieres eliminar «{{ pendingDeleteLine()!.item.trim() }}»?
+        } @else {
+          ¿Quieres eliminar este ítem?
+        }
+      </p>
+      <footer class="home-page__confirm-actions">
+        <button
+          type="button"
+          class="home-page__btn home-page__btn--ghost home-page__confirm-btn"
+          (click)="cancelRemoveLine()"
+        >
+          No
+        </button>
+        <button
+          type="button"
+          class="home-page__btn home-page__btn--danger home-page__confirm-btn"
+          (click)="confirmRemoveLine()"
+        >
+          Sí
+        </button>
+      </footer>
+    </dialog>
+  }
 </section>

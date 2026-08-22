@@ -4,9 +4,11 @@ Aplicación web para **planificar y seguir el gasto semanal** (Tata Card / vale 
 
 ## ¿Para qué sirve?
 
-- Fijar el **monto total semanal** (cupo o lo que querés gastar en la semana).
+- Fijar el **monto total semanal** (por defecto **$ 1.755**; editable).
 - Registrar conceptos en una **tabla**: descripción, cantidad, precio por unidad.
 - Ver en tiempo real **consumido**, **disponible** y un aviso si te pasás del tope.
+- **Limpiar ítems** de una sola vez para empezar una compra nueva sin borrar fila por fila.
+- **Confirmación al eliminar** una fila: diálogo con **Sí** / **No** antes de borrar.
 
 ## Datos: dónde viven
 
@@ -30,6 +32,7 @@ En **Safari de iPhone**, por limitación de Apple/WebKit, ese aviso **no es fiab
 | Estilos | SCSS |
 | Formato | Prettier (`npm run format`) |
 | Rutas | Raíz redirige a `/home-page` |
+| UI | HTML semántico (`section`, `dialog`, `table`, etc.); ver `.cursor/frontend-ui.md` |
 
 ## Requisitos
 
@@ -49,7 +52,12 @@ npm run format:check  # comprobar formato sin escribir archivos
 ## Estructura relevante
 
 - `src/app/app.routes.ts` — rutas y redirección inicial.
-- `src/app/home-page/` — pantalla principal: presupuesto, tabla, cálculos, persistencia y `beforeunload`.
+- `src/app/home-page/` — pantalla principal: presupuesto, tabla, cálculos, persistencia, limpiar ítems, confirmación de borrado y `beforeunload`.
+
+## Convenciones del proyecto
+
+- Commits en español (Conventional Commits): ver `.cursor/rules/commits-espanol-solid.mdc`.
+- Templates con **HTML semántico** (no `div` genéricos): ver `.cursor/frontend-ui.md`.
 
 ## Documentación Angular
 

@@ -1,10 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   HostListener,
   computed,
   effect,
   signal,
+  viewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -32,12 +34,33 @@ export class HomePageComponent {
 
   readonly lines = signal<BudgetLine[]>([this.createEmptyLine()]);
 
+  /** Fila pendiente de confirmación para eliminar; null si no hay diálogo abierto. */
+  readonly pendingDeleteLineId = signal<string | null>(null);
+
+  readonly pendingDeleteLine = computed(() => {
+    const id = this.pendingDeleteLineId();
+    if (!id) {
+      return null;
+    }
+    return this.lines().find((row) => row.id === id) ?? null;
+  });
+
+  private readonly deleteConfirmDialog =
+    viewChild<ElementRef<HTMLDialogElement>>('deleteConfirmDialog');
+
   constructor() {
     this.restoreFromLocalStorage();
     effect(() => {
       this.weeklyBudget();
       this.lines();
       this.persistToLocalStorage();
+    });
+    effect(() => {
+      const id = this.pendingDeleteLineId();
+      const dialog = this.deleteConfirmDialog()?.nativeElement;
+      if (id && dialog && !dialog.open) {
+        dialog.showModal();
+      }
     });
   }
 
@@ -129,11 +152,34 @@ export class HomePageComponent {
     this.lines.update((rows) => [...rows, this.createEmptyLine()]);
   }
 
-  removeLine(id: string): void {
+  requestRemoveLine(id: string): void {
+    this.pendingDeleteLineId.set(id);
+  }
+
+  confirmRemoveLine(): void {
+    const id = this.pendingDeleteLineId();
+    if (!id) {
+      return;
+    }
     this.lines.update((rows) => {
       const filtered = rows.filter((r) => r.id !== id);
       return filtered.length > 0 ? filtered : [this.createEmptyLine()];
     });
+    this.deleteConfirmDialog()?.nativeElement.close();
+  }
+
+  cancelRemoveLine(): void {
+    this.deleteConfirmDialog()?.nativeElement.close();
+  }
+
+  onDeleteDialogClick(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      this.cancelRemoveLine();
+    }
+  }
+
+  onDeleteDialogClose(): void {
+    this.pendingDeleteLineId.set(null);
   }
 
   clearLines(): void {
@@ -220,15 +266,10 @@ export class HomePageComponent {
       return null;
     }
     const r = row as Record<string, unknown>;
-    const id =
-      typeof r['id'] === 'string' && r['id'].length > 0
-        ? r['id']
-        : crypto.randomUUID();
+    const id = typeof r['id'] === 'string' && r['id'].length > 0 ? r['id'] : crypto.randomUUID();
     const item = typeof r['item'] === 'string' ? r['item'] : '';
-    const quantity =
-      typeof r['quantity'] === 'number' ? this.clampQty(r['quantity']) : 1;
-    const unitPrice =
-      typeof r['unitPrice'] === 'number' ? this.clampMoney(r['unitPrice']) : 0;
+    const quantity = typeof r['quantity'] === 'number' ? this.clampQty(r['quantity']) : 1;
+    const unitPrice = typeof r['unitPrice'] === 'number' ? this.clampMoney(r['unitPrice']) : 0;
     return { id, item, quantity, unitPrice };
   }
 }

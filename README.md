@@ -9,16 +9,16 @@ Aplicación web para **planificar y seguir el gasto semanal** (Tata Card / vale 
 - Ver en tiempo real **consumido**, **disponible** y un aviso si te pasás del tope.
 - **Limpiar ítems** de una sola vez para empezar una compra nueva sin borrar fila por fila.
 - **Confirmación** al **eliminar** una fila o al **limpiar** todos los ítems: diálogo con **Sí** / **No**.
-- Al **ingresar un precio** (> 0), el ítem se considera comprado y **pasa al final** de la lista (los de precio 0 quedan arriba).
+- Al **ingresar un precio** (> 0), el ítem se considera comprado y **pasa al final** de la lista tras **unos 4 segundos** sin más cambios de precio (los de precio 0 quedan arriba).
 - **Reordenar** filas con **arrastrar y soltar** desde el asa de cada fila.
 
 ## Datos: dónde viven
 
-| Aspecto | Detalle |
-| -------- | ------- |
-| **Servidor** | No hay backend: todo corre en el navegador. |
+| Aspecto          | Detalle                                                                                                                                                                                        |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Servidor**     | No hay backend: todo corre en el navegador.                                                                                                                                                    |
 | **Persistencia** | El estado se guarda en **`localStorage`** (clave `tata-card:vale-semanal:v1`). Al recargar o volver otro día **en el mismo dispositivo y origen** (misma URL), se restaura lo último guardado. |
-| **Límites** | Modo privado / sin espacio / políticas del navegador pueden impedir guardar. No se sincroniza entre dispositivos ni navegadores. |
+| **Límites**      | Modo privado / sin espacio / políticas del navegador pueden impedir guardar. No se sincroniza entre dispositivos ni navegadores.                                                               |
 
 ### Aviso al salir o recargar (escritorio)
 
@@ -28,13 +28,13 @@ En **Safari de iPhone**, por limitación de Apple/WebKit, ese aviso **no es fiab
 
 ## Stack técnico
 
-| Aspecto | Detalle |
-| ------- | ------- |
-| Framework | Angular **19**, componentes **standalone** |
-| Estilos | SCSS |
-| Formato | Prettier (`npm run format`) |
-| Rutas | Raíz redirige a `/home-page` |
-| UI | HTML semántico (`section`, `dialog`, `table`, etc.); ver `.cursor/frontend-ui.md` |
+| Aspecto   | Detalle                                                                           |
+| --------- | --------------------------------------------------------------------------------- |
+| Framework | Angular **19**, componentes **standalone**                                        |
+| Estilos   | SCSS                                                                              |
+| Formato   | Prettier (`npm run format`)                                                       |
+| Rutas     | Raíz redirige a `/home-page`                                                      |
+| UI        | HTML semántico (`section`, `dialog`, `table`, etc.); ver `.cursor/frontend-ui.md` |
 
 ## Requisitos
 

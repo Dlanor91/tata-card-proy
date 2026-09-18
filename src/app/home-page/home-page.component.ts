@@ -2,10 +2,12 @@ import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
   HostListener,
   computed,
   effect,
+  inject,
   signal,
   viewChild,
 } from '@angular/core';
@@ -29,6 +31,13 @@ export class HomePageComponent {
   private static readonly INITIAL_WEEKLY_BUDGET = 1755;
   /** Clave v1; si cambia el formato, incrementar y migrar o usar otra clave. */
   private static readonly STORAGE_KEY = 'tata-card:vale-semanal:v1';
+  /** Espera tras el último cambio de precio antes de mandar el ítem al final. */
+  private static readonly MOVE_TO_END_DELAY_MS = 4000;
+
+  private readonly destroyRef = inject(DestroyRef);
+
+  /** Timers pendientes por fila: al terminar de editar el precio, mover al final. */
+  private readonly pendingMoveTimers = new Map<string, ReturnType<typeof setTimeout>>();
 
   /** Monto tope semanal (ej. 1755). */
   readonly weeklyBudget = signal(HomePageComponent.INITIAL_WEEKLY_BUDGET);
@@ -57,6 +66,7 @@ export class HomePageComponent {
 
   constructor() {
     this.restoreFromLocalStorage();
+    this.destroyRef.onDestroy(() => this.clearAllMoveTimers());
     effect(() => {
       this.weeklyBudget();
       this.lines();
@@ -160,15 +170,12 @@ export class HomePageComponent {
         next.unitPrice = this.clampMoney(next.unitPrice);
       }
 
-      const updated = rows.map((row, i) => (i === index ? next : row));
-
-      // Precio ingresado (> 0) = comprado → al final, para dejar sin comprar arriba.
-      if ('unitPrice' in patch && previous.unitPrice === 0 && next.unitPrice > 0) {
-        return this.moveLineToEnd(updated, id);
-      }
-
-      return updated;
+      return rows.map((row, i) => (i === index ? next : row));
     });
+
+    if ('unitPrice' in patch) {
+      this.scheduleMoveToEndAfterPrice(id);
+    }
   }
 
   addLine(): void {
@@ -209,6 +216,7 @@ export class HomePageComponent {
     if (!id) {
       return;
     }
+    this.clearMoveTimer(id);
     this.lines.update((rows) => {
       const filtered = rows.filter((r) => r.id !== id);
       return filtered.length > 0 ? filtered : [this.createEmptyLine()];
@@ -239,6 +247,7 @@ export class HomePageComponent {
   }
 
   confirmClearLines(): void {
+    this.clearAllMoveTimers();
     this.lines.set([this.createEmptyLine()]);
     this.clearConfirmDialog()?.nativeElement.close();
   }
@@ -255,6 +264,48 @@ export class HomePageComponent {
 
   onClearDialogClose(): void {
     this.pendingClearConfirm.set(false);
+  }
+
+  /**
+   * Reinicia un timer de 4s por fila: al dejar de editar el precio, si sigue > 0,
+   * mueve el ítem al final (así se puede escribir precios de varios dígitos).
+   */
+  private scheduleMoveToEndAfterPrice(id: string): void {
+    this.clearMoveTimer(id);
+    const line = this.lines().find((row) => row.id === id);
+    if (!line || line.unitPrice <= 0) {
+      return;
+    }
+    const timer = setTimeout(() => {
+      this.pendingMoveTimers.delete(id);
+      this.movePaidLineToEnd(id);
+    }, HomePageComponent.MOVE_TO_END_DELAY_MS);
+    this.pendingMoveTimers.set(id, timer);
+  }
+
+  private movePaidLineToEnd(id: string): void {
+    this.lines.update((rows) => {
+      const line = rows.find((row) => row.id === id);
+      if (!line || line.unitPrice <= 0) {
+        return rows;
+      }
+      return this.moveLineToEnd(rows, id);
+    });
+  }
+
+  private clearMoveTimer(id: string): void {
+    const timer = this.pendingMoveTimers.get(id);
+    if (timer != null) {
+      clearTimeout(timer);
+      this.pendingMoveTimers.delete(id);
+    }
+  }
+
+  private clearAllMoveTimers(): void {
+    for (const timer of this.pendingMoveTimers.values()) {
+      clearTimeout(timer);
+    }
+    this.pendingMoveTimers.clear();
   }
 
   private moveLineToEnd(rows: BudgetLine[], id: string): BudgetLine[] {

@@ -89,7 +89,7 @@ $bp-phone: 47.9375rem; // < 768px
   padding: 0.5rem 0.625rem;
   border: 0.0625rem solid #ccc;
   border-radius: 0.375rem;
-  font-size: 1rem; /* ≥16px evita zoom automático en iOS Safari */
+  font-size: 0.875rem; /* 14px */
   min-width: 0;
   max-width: 100%;
 }
@@ -580,6 +580,10 @@ $bp-phone: 47.9375rem; // < 768px
 
   .home-page__td-item {
     min-width: 0;
+  }
+
+  .home-page__td-item .home-page__input {
+    font-size: 0.875rem; /* 14px: mismo tamaño que Cant/Precio */
   }
 
   .home-page__td-qty,

@@ -1,16 +1,24 @@
-$bp-narrow: 26.625rem; // ~426px
+/* iPhone 14 ≈ 390px; Plus/Pro Max ≈ 428–430px; cubre teléfonos en vertical */
+$bp-phone: 47.9375rem; // < 768px
 
 .home-page {
   padding: 1rem;
+  padding-top: max(1rem, env(safe-area-inset-top, 0px));
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
   max-width: 56rem;
   margin: 0 auto;
   font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .home-page__toolbar {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 0.75rem;
+  gap: 0.5rem;
 }
 
 .home-page__header {
@@ -81,8 +89,9 @@ $bp-narrow: 26.625rem; // ~426px
   padding: 0.5rem 0.625rem;
   border: 0.0625rem solid #ccc;
   border-radius: 0.375rem;
-  font-size: 0.9375rem;
+  font-size: 1rem; /* ≥16px evita zoom automático en iOS Safari */
   min-width: 0;
+  max-width: 100%;
 }
 
 .home-page__input--budget {
@@ -141,13 +150,14 @@ $bp-narrow: 26.625rem; // ~426px
 }
 
 .home-page__items {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow-x: visible;
+  width: 100%;
+  min-width: 0;
 }
 
 .home-page__table {
   width: 100%;
-  min-width: min(100%, 18rem);
+  min-width: 0;
   border-collapse: collapse;
   margin-bottom: 0.75rem;
   font-size: 0.9375rem;
@@ -168,7 +178,9 @@ $bp-narrow: 26.625rem; // ~426px
 
 .home-page__table tr {
   display: grid;
-  grid-template-columns: 2.5rem minmax(0, 1.6fr) minmax(4.5rem, 0.7fr) minmax(4.5rem, 0.7fr) minmax(5rem, 0.8fr) 3.5rem;
+  grid-template-columns:
+    2.5rem minmax(0, 1.6fr) minmax(4.5rem, 0.7fr) minmax(4.5rem, 0.7fr) minmax(5rem, 0.8fr)
+    3.5rem;
   align-items: center;
 }
 
@@ -190,7 +202,9 @@ $bp-narrow: 26.625rem; // ~426px
 
 .home-page__row.cdk-drag-preview {
   display: grid;
-  grid-template-columns: 2.5rem minmax(0, 1.6fr) minmax(4.5rem, 0.7fr) minmax(4.5rem, 0.7fr) minmax(5rem, 0.8fr) 3.5rem;
+  grid-template-columns:
+    2.5rem minmax(0, 1.6fr) minmax(4.5rem, 0.7fr) minmax(4.5rem, 0.7fr) minmax(5rem, 0.8fr)
+    3.5rem;
   align-items: center;
   box-sizing: border-box;
   background: #fff;
@@ -217,6 +231,7 @@ $bp-narrow: 26.625rem; // ~426px
   text-align: center !important;
   padding-left: 0.25rem;
   padding-right: 0.25rem;
+  justify-content: center;
 }
 
 .home-page__drag-handle {
@@ -224,8 +239,8 @@ $bp-narrow: 26.625rem; // ~426px
   align-items: center;
   justify-content: center;
   padding: 0.25rem;
-  min-width: 2.25rem;
-  min-height: 2.25rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   border: none;
   background: transparent;
   color: #666;
@@ -233,6 +248,7 @@ $bp-narrow: 26.625rem; // ~426px
   border-radius: 0.375rem;
   touch-action: none;
   user-select: none;
+  -webkit-user-select: none;
 }
 
 .home-page__drag-handle:hover {
@@ -253,6 +269,7 @@ $bp-narrow: 26.625rem; // ~426px
 .home-page__td-subtotal {
   text-align: center !important;
   font-variant-numeric: tabular-nums;
+  justify-content: center;
 }
 
 .home-page__subtotal-value {
@@ -270,6 +287,7 @@ $bp-narrow: 26.625rem; // ~426px
   width: 3.5rem;
   text-align: center !important;
   white-space: nowrap;
+  justify-content: center;
 }
 
 .home-page__btn {
@@ -347,6 +365,7 @@ $bp-narrow: 26.625rem; // ~426px
 
 .home-page__confirm {
   width: min(calc(100% - 2rem), 22rem);
+  max-width: calc(100vw - 2rem - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
   padding: 1.25rem;
   border: none;
   border-radius: 0.5rem;
@@ -387,13 +406,17 @@ $bp-narrow: 26.625rem; // ~426px
   align-items: center;
   justify-content: center;
   padding: 0.25rem;
-  min-width: 2.25rem;
-  min-height: 2.25rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
 }
 
 .home-page__btn--icon .material-icons {
   font-size: 1.25rem;
   line-height: 1;
+}
+
+.home-page__th-short {
+  display: none;
 }
 
 .visually-hidden {
@@ -408,121 +431,245 @@ $bp-narrow: 26.625rem; // ~426px
   border: 0;
 }
 
-@media (max-width: $bp-narrow) {
+/* —— Teléfono (iPhone 14 / Safari y similares): una sola fila por ítem —— */
+@media (max-width: $bp-phone) {
   .home-page {
-    padding: 0.3rem;
-    font-size: 0.625rem;
+    padding: 0.5rem;
+    padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
+    padding-right: max(0.5rem, env(safe-area-inset-right, 0px));
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+    padding-left: max(0.5rem, env(safe-area-inset-left, 0px));
+    font-size: 0.875rem; /* 14px */
+  }
+
+  .home-page__header {
+    margin-bottom: 0.75rem;
   }
 
   .home-page__header h1 {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
 
   .home-page__lead {
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
   }
 
   .home-page__budget {
-    padding: 0.75rem;
+    padding: 0.625rem;
+    margin-bottom: 0.75rem;
+    gap: 0.5rem;
   }
 
-  .home-page__input {
+  .home-page__label {
+    font-size: 0.75rem;
+  }
+
+  .home-page__summary-label {
+    font-size: 0.625rem;
+  }
+
+  .home-page__summary-dd {
     font-size: 0.875rem;
-    padding: 0.4375rem 0.5rem;
   }
 
   .home-page__summary-dd--available strong,
   .home-page__summary-dd--negative strong {
-    font-size: 1rem;
+    font-size: 0.9375rem;
+  }
+
+  .home-page__input--budget {
+    max-width: none;
+    width: 100%;
+  }
+
+  .home-page__toolbar {
+    margin-bottom: 0.375rem;
+  }
+
+  .home-page__btn--clear {
+    width: 100%;
+    justify-content: center;
+    min-height: 2.25rem;
+    padding: 0.375rem 0.625rem;
+    font-size: 0.875rem;
+  }
+
+  .home-page__btn--clear .material-icons {
+    font-size: 1.125rem;
+  }
+
+  .home-page__th-full {
+    display: none;
+  }
+
+  .home-page__th-short {
+    display: inline;
   }
 
   .home-page__table {
-    table-layout: fixed;
-    width: 100%;
-    min-width: 0;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
+    border: 0.0625rem solid #e0e0e0;
+    border-radius: 0.375rem;
+    overflow: hidden;
   }
 
-  .home-page__table tr {
-    grid-template-columns: 1.75rem minmax(0, 1.5fr) minmax(3rem, 0.65fr) minmax(3rem, 0.65fr) minmax(3.5rem, 0.75fr) 2rem;
+  .home-page__table thead {
+    display: block;
+    background: #f3f3f3;
+  }
+
+  .home-page__tbody {
+    display: block;
+  }
+
+  .home-page__table tr,
+  .home-page__row.cdk-drag-preview {
+    display: grid;
+    grid-template-columns: 1.75rem minmax(0, 1.4fr) 2.75rem 3.25rem 3.5rem 1.75rem;
+    align-items: center;
+    column-gap: 0.25rem;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0.25rem 0.25rem;
+    border: none;
+    border-radius: 0;
+    background: #fff;
+  }
+
+  .home-page__table thead tr {
+    background: #f3f3f3;
+    border-bottom: 0.0625rem solid #e0e0e0;
+    padding: 0.375rem 0.25rem;
+  }
+
+  .home-page__table tbody tr {
+    border-bottom: 0.0625rem solid #ebebeb;
+  }
+
+  .home-page__table tbody tr:last-child {
+    border-bottom: none;
   }
 
   .home-page__table th,
   .home-page__table td {
-    padding: 0.25rem 0.3rem;
-    word-break: break-word;
+    border: none;
+    padding: 0.125rem;
+    background: transparent;
+    font-size: 0.875rem;
   }
 
-  .home-page__th-drag,
-  .home-page__td-drag {
-    padding-left: 0.1rem;
-    padding-right: 0.1rem;
+  .home-page__table th {
+    font-weight: 600;
+    font-size: 0.75rem;
+    justify-content: center;
+    text-align: center;
   }
 
-  .home-page__drag-handle {
-    min-width: 1.75rem;
-    min-height: 1.75rem;
-    padding: 0.1rem;
+  .home-page__table th:nth-child(2) {
+    justify-content: flex-start;
+    text-align: left;
   }
 
-  .home-page__drag-handle .material-icons {
-    font-size: 1rem;
+  .home-page__td-drag,
+  .home-page__th-drag {
+    width: auto;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .home-page__td-item {
+    min-width: 0;
+  }
+
+  .home-page__td-qty,
+  .home-page__td-price,
+  .home-page__td-subtotal,
+  .home-page__td-actions {
+    width: auto;
+    justify-content: center;
   }
 
   .home-page__td-subtotal {
-    font-size: 0.6875rem;
+    text-align: center !important;
+  }
+
+  .home-page__input {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.3rem;
+    min-height: 1.75rem;
+    border-radius: 0.25rem;
+  }
+
+  .home-page__input--num {
+    max-width: none;
+    width: 100%;
+    text-align: right;
     padding-left: 0.2rem;
     padding-right: 0.2rem;
   }
 
   .home-page__subtotal-value {
-    font-size: 0.6875rem;
-    font-weight: 600;
-  }
-
-  .home-page__th-subtotal {
-    font-size: 0.6875rem;
-    padding-left: 0.2rem;
-    padding-right: 0.2rem;
-  }
-
-  .home-page__th-actions,
-  .home-page__td-actions {
-    padding-left: 0.2rem;
-    padding-right: 0.2rem;
-  }
-
-  .home-page__input {
     font-size: 0.75rem;
-    padding: 0.25rem 0.35rem;
+    font-weight: 600;
+    min-height: auto;
+    line-height: 1.2;
+    white-space: nowrap;
   }
 
-  .home-page__input--num {
-    max-width: 100%;
-    width: 100%;
-  }
-
+  .home-page__drag-handle,
   .home-page__btn--icon {
-    min-width: 1.875rem;
-    min-height: 1.875rem;
-    padding: 0.125rem;
+    min-width: 1.75rem;
+    min-height: 1.75rem;
+    padding: 0.1rem;
   }
 
+  .home-page__drag-handle .material-icons,
   .home-page__btn--icon .material-icons {
     font-size: 1rem;
   }
 
-  .home-page__btn--primary {
-    padding: 0.4375rem 0.625rem;
-    font-size: 0.8125rem;
+  .home-page__btn--add {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    margin-top: 0.375rem;
   }
 
-  .home-page__btn--clear {
-    padding: 0.4375rem 0.75rem;
-    font-size: 0.8125rem;
+  .home-page__row.cdk-drag-preview {
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.16);
+    border-radius: 0.25rem;
+    border: 0.0625rem solid #d0d0d0;
   }
 
-  .home-page__btn--clear .material-icons {
-    font-size: 1.125rem;
+  .home-page__row.cdk-drag-placeholder {
+    opacity: 0.45;
+    background: #e8eefc;
+  }
+
+  .home-page__row.cdk-drag-placeholder td {
+    background: transparent;
+  }
+
+  .home-page__confirm-title {
+    font-size: 1rem;
+  }
+
+  .home-page__confirm-message {
+    font-size: 0.875rem;
+  }
+
+  .home-page__confirm-actions {
+    flex-wrap: wrap;
+  }
+
+  .home-page__confirm-btn {
+    min-height: 2.25rem;
+    flex: 1 1 auto;
+    font-size: 0.875rem;
   }
 }

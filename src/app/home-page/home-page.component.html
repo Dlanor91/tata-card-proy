@@ -64,9 +64,15 @@
             <span class="visually-hidden">Reordenar</span>
           </th>
           <th scope="col">Ítems</th>
-          <th scope="col">Cantidad</th>
-          <th scope="col">Precio</th>
-          <th scope="col" class="home-page__th-subtotal">Subtotal</th>
+          <th scope="col" class="home-page__th-qty">
+            <span class="home-page__th-full">Cantidad</span>
+            <span class="home-page__th-short">Cant</span>
+          </th>
+          <th scope="col" class="home-page__th-price">Precio</th>
+          <th scope="col" class="home-page__th-subtotal">
+            <span class="home-page__th-full">Subtotal</span>
+            <span class="home-page__th-short">Subt</span>
+          </th>
           <th scope="col" class="home-page__th-actions">
             <span class="visually-hidden">Eliminar fila</span>
           </th>
@@ -92,7 +98,7 @@
                 <span class="material-icons" aria-hidden="true">drag_indicator</span>
               </button>
             </td>
-            <td>
+            <td class="home-page__td-item">
               <input
                 class="home-page__input"
                 type="text"
@@ -102,7 +108,7 @@
                 autocomplete="off"
               />
             </td>
-            <td>
+            <td class="home-page__td-qty">
               <input
                 class="home-page__input home-page__input--num"
                 type="number"
@@ -111,9 +117,10 @@
                 [ngModel]="line.quantity"
                 (ngModelChange)="updateLine(line.id, { quantity: +$event })"
                 inputmode="numeric"
+                aria-label="Cantidad"
               />
             </td>
-            <td>
+            <td class="home-page__td-price">
               <input
                 class="home-page__input home-page__input--num"
                 type="number"
@@ -122,6 +129,7 @@
                 [ngModel]="line.unitPrice"
                 (ngModelChange)="updateLine(line.id, { unitPrice: +$event })"
                 inputmode="decimal"
+                aria-label="Precio"
               />
             </td>
             <td class="home-page__td-subtotal">
@@ -143,7 +151,11 @@
         }
       </tbody>
     </table>
-    <button type="button" class="home-page__btn home-page__btn--primary" (click)="addLine()">
+    <button
+      type="button"
+      class="home-page__btn home-page__btn--primary home-page__btn--add"
+      (click)="addLine()"
+    >
       Agregar ítem
     </button>
   </section>

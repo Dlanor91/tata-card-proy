@@ -166,6 +166,68 @@ $bp-narrow: 26.625rem; // ~426px
   font-weight: 600;
 }
 
+.home-page__tbody {
+  display: table-row-group;
+}
+
+.home-page__row.cdk-drag-preview {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.16);
+  border-radius: 0.25rem;
+}
+
+.home-page__row.cdk-drag-placeholder {
+  opacity: 0.35;
+  background: #e8eefc;
+}
+
+.home-page__row.cdk-drag-animating {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.home-page__tbody.cdk-drop-list-dragging .home-page__row:not(.cdk-drag-placeholder) {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.home-page__th-drag,
+.home-page__td-drag {
+  width: 2.5rem;
+  text-align: center !important;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.home-page__drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+  border: none;
+  background: transparent;
+  color: #666;
+  cursor: grab;
+  border-radius: 0.375rem;
+}
+
+.home-page__drag-handle:hover {
+  background: #ececec;
+  color: #333;
+}
+
+.home-page__drag-handle:active {
+  cursor: grabbing;
+}
+
+.home-page__drag-handle .material-icons {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
 .home-page__th-subtotal,
 .home-page__td-subtotal {
   text-align: center !important;
@@ -366,30 +428,51 @@ $bp-narrow: 26.625rem; // ~426px
     word-break: break-word;
   }
 
-  /* Ítems | Cantidad | Precio | Subtotal | Eliminar */
+  /* Drag | Ítems | Cantidad | Precio | Subtotal | Eliminar */
   .home-page__table th:nth-child(1),
   .home-page__table td:nth-child(1) {
-    width: 45%;
+    width: 8%;
   }
 
   .home-page__table th:nth-child(2),
   .home-page__table td:nth-child(2) {
-    width: 17%;
+    width: 40%;
   }
 
   .home-page__table th:nth-child(3),
   .home-page__table td:nth-child(3) {
-    width: 13%;
+    width: 15%;
   }
 
   .home-page__table th:nth-child(4),
   .home-page__table td:nth-child(4) {
-    width: 14%;
+    width: 12%;
   }
 
   .home-page__table th:nth-child(5),
   .home-page__table td:nth-child(5) {
-    width: 10%;
+    width: 14%;
+  }
+
+  .home-page__table th:nth-child(6),
+  .home-page__table td:nth-child(6) {
+    width: 11%;
+  }
+
+  .home-page__th-drag,
+  .home-page__td-drag {
+    padding-left: 0.1rem;
+    padding-right: 0.1rem;
+  }
+
+  .home-page__drag-handle {
+    min-width: 1.75rem;
+    min-height: 1.75rem;
+    padding: 0.1rem;
+  }
+
+  .home-page__drag-handle .material-icons {
+    font-size: 1rem;
   }
 
   .home-page__td-subtotal {

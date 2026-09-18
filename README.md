@@ -8,7 +8,9 @@ Aplicación web para **planificar y seguir el gasto semanal** (Tata Card / vale 
 - Registrar conceptos en una **tabla**: descripción, cantidad, precio por unidad.
 - Ver en tiempo real **consumido**, **disponible** y un aviso si te pasás del tope.
 - **Limpiar ítems** de una sola vez para empezar una compra nueva sin borrar fila por fila.
-- **Confirmación al eliminar** una fila: diálogo con **Sí** / **No** antes de borrar.
+- **Confirmación** al **eliminar** una fila o al **limpiar** todos los ítems: diálogo con **Sí** / **No**.
+- Al **ingresar un precio** (> 0), el ítem se considera comprado y **pasa al final** de la lista (los de precio 0 quedan arriba).
+- **Reordenar** filas con **arrastrar y soltar** desde el asa de cada fila.
 
 ## Datos: dónde viven
 
@@ -52,7 +54,7 @@ npm run format:check  # comprobar formato sin escribir archivos
 ## Estructura relevante
 
 - `src/app/app.routes.ts` — rutas y redirección inicial.
-- `src/app/home-page/` — pantalla principal: presupuesto, tabla, cálculos, persistencia, limpiar ítems, confirmación de borrado y `beforeunload`.
+- `src/app/home-page/` — pantalla principal: presupuesto, tabla, cálculos, persistencia, orden por precio, drag-and-drop, limpiar ítems, confirmaciones y `beforeunload`.
 
 ## Convenciones del proyecto
 

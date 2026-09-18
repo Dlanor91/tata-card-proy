@@ -55,8 +55,8 @@
   <section class="home-page__items" aria-labelledby="items-caption">
     <table class="home-page__table">
       <caption id="items-caption" class="visually-hidden">
-        Ítems del gasto semanal: nombre, cantidad, precio unitario y subtotal. Podés
-        reordenar arrastrando desde el asa.
+        Ítems del gasto semanal: nombre, cantidad, precio unitario y subtotal. Podés reordenar
+        arrastrando desde el asa.
       </caption>
       <thead>
         <tr>
@@ -73,13 +73,14 @@
         </tr>
       </thead>
       <tbody
+        class="home-page__tbody"
         cdkDropList
         [cdkDropListData]="lines()"
+        cdkDropListOrientation="vertical"
         (cdkDropListDropped)="dropLine($event)"
-        class="home-page__tbody"
       >
         @for (line of lines(); track line.id) {
-          <tr class="home-page__row" cdkDrag [cdkDragData]="line">
+          <tr class="home-page__row" cdkDrag [cdkDragData]="line" cdkDragLockAxis="y">
             <td class="home-page__td-drag">
               <button
                 type="button"

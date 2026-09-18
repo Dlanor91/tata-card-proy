@@ -1,8 +1,4 @@
-import {
-  CdkDragDrop,
-  DragDropModule,
-  moveItemInArray,
-} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -187,12 +183,18 @@ export class HomePageComponent {
   }
 
   dropLine(event: CdkDragDrop<BudgetLine[]>): void {
-    if (event.previousIndex === event.currentIndex) {
+    const dragged = event.item.data as BudgetLine | undefined;
+    const previousIndex =
+      dragged?.id != null
+        ? this.lines().findIndex((row) => row.id === dragged.id)
+        : event.previousIndex;
+    const currentIndex = event.currentIndex;
+    if (previousIndex < 0 || previousIndex === currentIndex) {
       return;
     }
     this.lines.update((rows) => {
       const next = [...rows];
-      moveItemInArray(next, event.previousIndex, event.currentIndex);
+      moveItemInArray(next, previousIndex, currentIndex);
       return next;
     });
   }

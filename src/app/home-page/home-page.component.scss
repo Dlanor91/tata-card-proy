@@ -151,6 +151,25 @@ $bp-narrow: 26.625rem; // ~426px
   border-collapse: collapse;
   margin-bottom: 0.75rem;
   font-size: 0.9375rem;
+  /* display:block en tr/tbody permite que CDK mida y reordene filas correctamente */
+  display: block;
+}
+
+.home-page__table thead,
+.home-page__table tbody,
+.home-page__table tr {
+  display: block;
+  width: 100%;
+}
+
+.home-page__table thead {
+  background: #f3f3f3;
+}
+
+.home-page__table tr {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1.6fr) minmax(4.5rem, 0.7fr) minmax(4.5rem, 0.7fr) minmax(5rem, 0.8fr) 3.5rem;
+  align-items: center;
 }
 
 .home-page__table th,
@@ -159,11 +178,75 @@ $bp-narrow: 26.625rem; // ~426px
   padding: 0.5rem;
   text-align: left;
   vertical-align: middle;
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
 
 .home-page__table th {
   background: #f3f3f3;
   font-weight: 600;
+}
+
+.home-page__row.cdk-drag-preview {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1.6fr) minmax(4.5rem, 0.7fr) minmax(4.5rem, 0.7fr) minmax(5rem, 0.8fr) 3.5rem;
+  align-items: center;
+  box-sizing: border-box;
+  background: #fff;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.16);
+  border-radius: 0.25rem;
+}
+
+.home-page__row.cdk-drag-placeholder td {
+  background: #e8eefc;
+  border-color: #c5d4f7;
+}
+
+.home-page__row.cdk-drag-animating {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.home-page__tbody.cdk-drop-list-dragging .home-page__row:not(.cdk-drag-placeholder) {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.home-page__th-drag,
+.home-page__td-drag {
+  width: 2.5rem;
+  text-align: center !important;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.home-page__drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+  border: none;
+  background: transparent;
+  color: #666;
+  cursor: grab;
+  border-radius: 0.375rem;
+  touch-action: none;
+  user-select: none;
+}
+
+.home-page__drag-handle:hover {
+  background: #ececec;
+  color: #333;
+}
+
+.home-page__drag-handle:active {
+  cursor: grabbing;
+}
+
+.home-page__drag-handle .material-icons {
+  font-size: 1.25rem;
+  line-height: 1;
 }
 
 .home-page__th-subtotal,
@@ -360,36 +443,30 @@ $bp-narrow: 26.625rem; // ~426px
     font-size: 0.75rem;
   }
 
+  .home-page__table tr {
+    grid-template-columns: 1.75rem minmax(0, 1.5fr) minmax(3rem, 0.65fr) minmax(3rem, 0.65fr) minmax(3.5rem, 0.75fr) 2rem;
+  }
+
   .home-page__table th,
   .home-page__table td {
     padding: 0.25rem 0.3rem;
     word-break: break-word;
   }
 
-  /* Ítems | Cantidad | Precio | Subtotal | Eliminar */
-  .home-page__table th:nth-child(1),
-  .home-page__table td:nth-child(1) {
-    width: 45%;
+  .home-page__th-drag,
+  .home-page__td-drag {
+    padding-left: 0.1rem;
+    padding-right: 0.1rem;
   }
 
-  .home-page__table th:nth-child(2),
-  .home-page__table td:nth-child(2) {
-    width: 17%;
+  .home-page__drag-handle {
+    min-width: 1.75rem;
+    min-height: 1.75rem;
+    padding: 0.1rem;
   }
 
-  .home-page__table th:nth-child(3),
-  .home-page__table td:nth-child(3) {
-    width: 13%;
-  }
-
-  .home-page__table th:nth-child(4),
-  .home-page__table td:nth-child(4) {
-    width: 14%;
-  }
-
-  .home-page__table th:nth-child(5),
-  .home-page__table td:nth-child(5) {
-    width: 10%;
+  .home-page__drag-handle .material-icons {
+    font-size: 1rem;
   }
 
   .home-page__td-subtotal {

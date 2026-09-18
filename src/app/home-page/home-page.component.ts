@@ -1,3 +1,4 @@
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -19,7 +20,7 @@ export interface BudgetLine {
 
 @Component({
   selector: 'app-home-page',
-  imports: [FormsModule],
+  imports: [FormsModule, DragDropModule],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,8 +35,11 @@ export class HomePageComponent {
 
   readonly lines = signal<BudgetLine[]>([this.createEmptyLine()]);
 
-  /** Fila pendiente de confirmación para eliminar; null si no hay diálogo abierto. */
+  /** Fila pendiente de confirmación para eliminar; null si no hay diálogo de borrado. */
   readonly pendingDeleteLineId = signal<string | null>(null);
+
+  /** true mientras el diálogo de limpiar ítems está pendiente. */
+  readonly pendingClearConfirm = signal(false);
 
   readonly pendingDeleteLine = computed(() => {
     const id = this.pendingDeleteLineId();
@@ -48,6 +52,9 @@ export class HomePageComponent {
   private readonly deleteConfirmDialog =
     viewChild<ElementRef<HTMLDialogElement>>('deleteConfirmDialog');
 
+  private readonly clearConfirmDialog =
+    viewChild<ElementRef<HTMLDialogElement>>('clearConfirmDialog');
+
   constructor() {
     this.restoreFromLocalStorage();
     effect(() => {
@@ -59,6 +66,13 @@ export class HomePageComponent {
       const id = this.pendingDeleteLineId();
       const dialog = this.deleteConfirmDialog()?.nativeElement;
       if (id && dialog && !dialog.open) {
+        dialog.showModal();
+      }
+    });
+    effect(() => {
+      const pending = this.pendingClearConfirm();
+      const dialog = this.clearConfirmDialog()?.nativeElement;
+      if (pending && dialog && !dialog.open) {
         dialog.showModal();
       }
     });
@@ -131,28 +145,62 @@ export class HomePageComponent {
     id: string,
     patch: Partial<Pick<BudgetLine, 'item' | 'quantity' | 'unitPrice'>>
   ): void {
-    this.lines.update((rows) =>
-      rows.map((row) => {
-        if (row.id !== id) {
-          return row;
-        }
-        const next = { ...row, ...patch };
-        if ('quantity' in patch) {
-          next.quantity = this.clampQty(next.quantity);
-        }
-        if ('unitPrice' in patch) {
-          next.unitPrice = this.clampMoney(next.unitPrice);
-        }
-        return next;
-      })
-    );
+    this.lines.update((rows) => {
+      const index = rows.findIndex((row) => row.id === id);
+      if (index < 0) {
+        return rows;
+      }
+
+      const previous = rows[index];
+      const next = { ...previous, ...patch };
+      if ('quantity' in patch) {
+        next.quantity = this.clampQty(next.quantity);
+      }
+      if ('unitPrice' in patch) {
+        next.unitPrice = this.clampMoney(next.unitPrice);
+      }
+
+      const updated = rows.map((row, i) => (i === index ? next : row));
+
+      // Precio ingresado (> 0) = comprado → al final, para dejar sin comprar arriba.
+      if ('unitPrice' in patch && previous.unitPrice === 0 && next.unitPrice > 0) {
+        return this.moveLineToEnd(updated, id);
+      }
+
+      return updated;
+    });
   }
 
   addLine(): void {
-    this.lines.update((rows) => [...rows, this.createEmptyLine()]);
+    this.lines.update((rows) => {
+      const empty = this.createEmptyLine();
+      const firstPaidIdx = rows.findIndex((row) => row.unitPrice > 0);
+      if (firstPaidIdx === -1) {
+        return [...rows, empty];
+      }
+      return [...rows.slice(0, firstPaidIdx), empty, ...rows.slice(firstPaidIdx)];
+    });
+  }
+
+  dropLine(event: CdkDragDrop<BudgetLine[]>): void {
+    const dragged = event.item.data as BudgetLine | undefined;
+    const previousIndex =
+      dragged?.id != null
+        ? this.lines().findIndex((row) => row.id === dragged.id)
+        : event.previousIndex;
+    const currentIndex = event.currentIndex;
+    if (previousIndex < 0 || previousIndex === currentIndex) {
+      return;
+    }
+    this.lines.update((rows) => {
+      const next = [...rows];
+      moveItemInArray(next, previousIndex, currentIndex);
+      return next;
+    });
   }
 
   requestRemoveLine(id: string): void {
+    this.pendingClearConfirm.set(false);
     this.pendingDeleteLineId.set(id);
   }
 
@@ -182,8 +230,40 @@ export class HomePageComponent {
     this.pendingDeleteLineId.set(null);
   }
 
-  clearLines(): void {
+  requestClearLines(): void {
+    if (!this.canClearLines()) {
+      return;
+    }
+    this.pendingDeleteLineId.set(null);
+    this.pendingClearConfirm.set(true);
+  }
+
+  confirmClearLines(): void {
     this.lines.set([this.createEmptyLine()]);
+    this.clearConfirmDialog()?.nativeElement.close();
+  }
+
+  cancelClearLines(): void {
+    this.clearConfirmDialog()?.nativeElement.close();
+  }
+
+  onClearDialogClick(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      this.cancelClearLines();
+    }
+  }
+
+  onClearDialogClose(): void {
+    this.pendingClearConfirm.set(false);
+  }
+
+  private moveLineToEnd(rows: BudgetLine[], id: string): BudgetLine[] {
+    const index = rows.findIndex((row) => row.id === id);
+    if (index < 0 || index === rows.length - 1) {
+      return rows;
+    }
+    const line = rows[index];
+    return [...rows.slice(0, index), ...rows.slice(index + 1), line];
   }
 
   private createEmptyLine(): BudgetLine {

@@ -42,7 +42,7 @@
     <button
       type="button"
       class="home-page__btn home-page__btn--clear"
-      (click)="clearLines()"
+      (click)="requestClearLines()"
       [disabled]="!canClearLines()"
       title="Limpiar ítems"
       aria-label="Limpiar ítems"
@@ -55,10 +55,14 @@
   <section class="home-page__items" aria-labelledby="items-caption">
     <table class="home-page__table">
       <caption id="items-caption" class="visually-hidden">
-        Ítems del gasto semanal: nombre, cantidad, precio unitario y subtotal
+        Ítems del gasto semanal: nombre, cantidad, precio unitario y subtotal. Podés reordenar
+        arrastrando desde el asa.
       </caption>
       <thead>
         <tr>
+          <th scope="col" class="home-page__th-drag">
+            <span class="visually-hidden">Reordenar</span>
+          </th>
           <th scope="col">Ítems</th>
           <th scope="col">Cantidad</th>
           <th scope="col">Precio</th>
@@ -68,9 +72,26 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody
+        class="home-page__tbody"
+        cdkDropList
+        [cdkDropListData]="lines()"
+        cdkDropListOrientation="vertical"
+        (cdkDropListDropped)="dropLine($event)"
+      >
         @for (line of lines(); track line.id) {
-          <tr>
+          <tr class="home-page__row" cdkDrag [cdkDragData]="line" cdkDragLockAxis="y">
+            <td class="home-page__td-drag">
+              <button
+                type="button"
+                class="home-page__drag-handle"
+                cdkDragHandle
+                title="Arrastrar para reordenar"
+                aria-label="Arrastrar para reordenar"
+              >
+                <span class="material-icons" aria-hidden="true">drag_indicator</span>
+              </button>
+            </td>
             <td>
               <input
                 class="home-page__input"
@@ -156,6 +177,38 @@
           type="button"
           class="home-page__btn home-page__btn--danger home-page__confirm-btn"
           (click)="confirmRemoveLine()"
+        >
+          Sí
+        </button>
+      </footer>
+    </dialog>
+  }
+
+  @if (pendingClearConfirm()) {
+    <dialog
+      #clearConfirmDialog
+      class="home-page__confirm"
+      aria-labelledby="confirm-clear-title"
+      aria-describedby="confirm-clear-message"
+      (click)="onClearDialogClick($event)"
+      (close)="onClearDialogClose()"
+    >
+      <h2 id="confirm-clear-title" class="home-page__confirm-title">Limpiar ítems</h2>
+      <p id="confirm-clear-message" class="home-page__confirm-message">
+        ¿Quieres eliminar todos los ítems y empezar de nuevo?
+      </p>
+      <footer class="home-page__confirm-actions">
+        <button
+          type="button"
+          class="home-page__btn home-page__btn--ghost home-page__confirm-btn"
+          (click)="cancelClearLines()"
+        >
+          No
+        </button>
+        <button
+          type="button"
+          class="home-page__btn home-page__btn--danger home-page__confirm-btn"
+          (click)="confirmClearLines()"
         >
           Sí
         </button>

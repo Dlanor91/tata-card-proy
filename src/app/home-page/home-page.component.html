@@ -92,7 +92,7 @@
                 <span class="material-icons" aria-hidden="true">drag_indicator</span>
               </button>
             </td>
-            <td>
+            <td class="home-page__td-item">
               <input
                 class="home-page__input"
                 type="text"
@@ -102,7 +102,7 @@
                 autocomplete="off"
               />
             </td>
-            <td>
+            <td class="home-page__td-qty" data-label="Cantidad">
               <input
                 class="home-page__input home-page__input--num"
                 type="number"
@@ -113,7 +113,7 @@
                 inputmode="numeric"
               />
             </td>
-            <td>
+            <td class="home-page__td-price" data-label="Precio">
               <input
                 class="home-page__input home-page__input--num"
                 type="number"
@@ -124,7 +124,7 @@
                 inputmode="decimal"
               />
             </td>
-            <td class="home-page__td-subtotal">
+            <td class="home-page__td-subtotal" data-label="Subtotal">
               <span class="home-page__subtotal-value">{{ formatMoney(lineSubtotal(line)) }}</span>
             </td>
             <td class="home-page__td-actions">
@@ -143,7 +143,11 @@
         }
       </tbody>
     </table>
-    <button type="button" class="home-page__btn home-page__btn--primary" (click)="addLine()">
+    <button
+      type="button"
+      class="home-page__btn home-page__btn--primary home-page__btn--add"
+      (click)="addLine()"
+    >
       Agregar ítem
     </button>
   </section>

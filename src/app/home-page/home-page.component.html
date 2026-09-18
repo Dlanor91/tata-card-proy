@@ -64,9 +64,15 @@
             <span class="visually-hidden">Reordenar</span>
           </th>
           <th scope="col">Ítems</th>
-          <th scope="col">Cantidad</th>
-          <th scope="col">Precio</th>
-          <th scope="col" class="home-page__th-subtotal">Subtotal</th>
+          <th scope="col" class="home-page__th-qty">
+            <span class="home-page__th-full">Cantidad</span>
+            <span class="home-page__th-short">Cant</span>
+          </th>
+          <th scope="col" class="home-page__th-price">Precio</th>
+          <th scope="col" class="home-page__th-subtotal">
+            <span class="home-page__th-full">Subtotal</span>
+            <span class="home-page__th-short">Subt</span>
+          </th>
           <th scope="col" class="home-page__th-actions">
             <span class="visually-hidden">Eliminar fila</span>
           </th>
@@ -102,7 +108,7 @@
                 autocomplete="off"
               />
             </td>
-            <td class="home-page__td-qty" data-label="Cantidad">
+            <td class="home-page__td-qty">
               <input
                 class="home-page__input home-page__input--num"
                 type="number"
@@ -111,9 +117,10 @@
                 [ngModel]="line.quantity"
                 (ngModelChange)="updateLine(line.id, { quantity: +$event })"
                 inputmode="numeric"
+                aria-label="Cantidad"
               />
             </td>
-            <td class="home-page__td-price" data-label="Precio">
+            <td class="home-page__td-price">
               <input
                 class="home-page__input home-page__input--num"
                 type="number"
@@ -122,9 +129,10 @@
                 [ngModel]="line.unitPrice"
                 (ngModelChange)="updateLine(line.id, { unitPrice: +$event })"
                 inputmode="decimal"
+                aria-label="Precio"
               />
             </td>
-            <td class="home-page__td-subtotal" data-label="Subtotal">
+            <td class="home-page__td-subtotal">
               <span class="home-page__subtotal-value">{{ formatMoney(lineSubtotal(line)) }}</span>
             </td>
             <td class="home-page__td-actions">

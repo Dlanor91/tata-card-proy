@@ -133,7 +133,9 @@
               />
             </td>
             <td class="home-page__td-subtotal">
-              <span class="home-page__subtotal-value">{{ formatMoney(lineSubtotal(line)) }}</span>
+              <output class="home-page__subtotal-value" aria-live="polite">
+                {{ formatMoney(lineSubtotal(line)) }}
+              </output>
             </td>
             <td class="home-page__td-actions">
               <button

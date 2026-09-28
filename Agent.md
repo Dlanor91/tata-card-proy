@@ -60,14 +60,14 @@ Instrucciones para agentes de IA que trabajan en este repositorio. No es la guí
 
 ## Comandos importantes
 
-| Intención | Comando | Notas |
-| --- | --- | --- |
-| Instalar | `npm install` / `npm ci` | CI usa `npm ci` |
-| Ejecutar | `npm start` | `ng serve` → http://localhost:4200/ |
-| Test | `npm test` | Karma/Jasmine; **hoy no hay `*.spec.ts`** |
-| Build | `npm run build` | Salida en `dist/tata-card` |
-| Formato | `npm run format` | Prettier write |
-| Verificar formato | `npm run format:check` | Prettier check |
+| Intención         | Comando                  | Notas                                     |
+| ----------------- | ------------------------ | ----------------------------------------- |
+| Instalar          | `npm install` / `npm ci` | CI usa `npm ci`                           |
+| Ejecutar          | `npm start`              | `ng serve` → http://localhost:4200/       |
+| Test              | `npm test`               | Karma/Jasmine; **hoy no hay `*.spec.ts`** |
+| Build             | `npm run build`          | Salida en `dist/tata-card`                |
+| Formato           | `npm run format`         | Prettier write                            |
+| Verificar formato | `npm run format:check`   | Prettier check                            |
 
 ## Dependencias que requieren cuidado
 

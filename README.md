@@ -36,14 +36,14 @@ En **Safari de iPhone**, por limitación de Apple/WebKit, ese aviso **no es fiab
 
 ## Stack técnico
 
-| Aspecto   | Detalle                                                                           |
-| --------- | --------------------------------------------------------------------------------- |
-| Framework | Angular **19**, componentes **standalone**                                        |
-| Estilos   | SCSS                                                                              |
-| Formato   | Prettier (`npm run format`)                                                       |
-| Rutas     | Raíz redirige a `/home-page`                                                      |
+| Aspecto   | Detalle                                                                              |
+| --------- | ------------------------------------------------------------------------------------ |
+| Framework | Angular **19**, componentes **standalone**                                           |
+| Estilos   | SCSS                                                                                 |
+| Formato   | Prettier (`npm run format`)                                                          |
+| Rutas     | Raíz redirige a `/home-page`                                                         |
 | UI        | HTML semántico (`section`, `dialog`, `table`, etc.); skill `frontend-conventions-es` |
-| Hosting   | Azure Static Web Apps (CI en GitHub Actions)                                      |
+| Hosting   | Azure Static Web Apps (CI en GitHub Actions)                                         |
 
 ## Requisitos
 

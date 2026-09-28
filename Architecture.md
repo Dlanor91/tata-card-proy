@@ -24,22 +24,22 @@ flowchart LR
 
 ## Componentes principales
 
-| Componente | Responsabilidad | Ubicación |
-| --- | --- | --- |
-| Bootstrap | Arranca la app standalone con router + zone | `src/main.ts`, `src/app/app.config.ts` |
-| Shell de app | Hostea `router-outlet` | `src/app/app.component.*` |
-| Rutas | Redirect `/` → `home-page`; lazy-load del feature | `src/app/app.routes.ts` |
-| Home page | Presupuesto, ítems, totales, diálogos, DnD, persistencia | `src/app/home-page/` |
-| Config estática | Fallback SPA a `index.html` | `public/staticwebapp.config.json` |
-| CI/CD | Build + upload a Azure SWA en `master` / PRs | `.github/workflows/azure-static-web-apps-*.yml` |
+| Componente      | Responsabilidad                                          | Ubicación                                       |
+| --------------- | -------------------------------------------------------- | ----------------------------------------------- |
+| Bootstrap       | Arranca la app standalone con router + zone              | `src/main.ts`, `src/app/app.config.ts`          |
+| Shell de app    | Hostea `router-outlet`                                   | `src/app/app.component.*`                       |
+| Rutas           | Redirect `/` → `home-page`; lazy-load del feature        | `src/app/app.routes.ts`                         |
+| Home page       | Presupuesto, ítems, totales, diálogos, DnD, persistencia | `src/app/home-page/`                            |
+| Config estática | Fallback SPA a `index.html`                              | `public/staticwebapp.config.json`               |
+| CI/CD           | Build + upload a Azure SWA en `master` / PRs             | `.github/workflows/azure-static-web-apps-*.yml` |
 
 ## Responsabilidades de componentes
 
-| Componente | Responsabilidad | Ubicación |
-| --- | --- | --- |
+| Componente          | Responsabilidad                                                                                                                                                                                                 | Ubicación                                  |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
 | `HomePageComponent` | Signal de presupuesto, CRUD de filas, formato de moneda, alerta de sobrecupo, limpiar todo, confirmar borrado, reorder por drag, mover al final tras precio &gt; 0, aviso `beforeunload`, sync con localStorage | `src/app/home-page/home-page.component.ts` |
-| Template | Estructura semántica: `section`, `table`, `dialog`, `output` para subtotales | `home-page.component.html` |
-| Estilos | Tabla en grid responsive (teléfono vs tablet+), diálogo, resumen de presupuesto | `home-page.component.scss` |
+| Template            | Estructura semántica: `section`, `table`, `dialog`, `output` para subtotales                                                                                                                                    | `home-page.component.html`                 |
+| Estilos             | Tabla en grid responsive (teléfono vs tablet+), diálogo, resumen de presupuesto                                                                                                                                 | `home-page.component.scss`                 |
 
 ## Comunicación
 
@@ -58,8 +58,8 @@ flowchart LR
 
 ## Persistencia de datos
 
-| Almacén | Clave / path | Contenido |
-| --- | --- | --- |
+| Almacén        | Clave / path                | Contenido                                                                      |
+| -------------- | --------------------------- | ------------------------------------------------------------------------------ |
 | `localStorage` | `tata-card:vale-semanal:v1` | JSON: `weeklyBudget` (number), `lines` (`id`, `item`, `quantity`, `unitPrice`) |
 
 - Presupuesto por defecto en vacío: **1755**.
